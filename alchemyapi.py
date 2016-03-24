@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-#	Copyright 2013 AlchemyAPI
+#   Copyright 2013 AlchemyAPI
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -136,8 +136,11 @@ class AlchemyAPI:
 
     s = requests.Session()
 
+    # Timeout for the request sent to api
+    timeout = None
+
     def __init__(self):
-        """	
+        """ 
         Initializes the SDK so it can send requests to AlchemyAPI for analysis.
         It loads the API key from api_key.txt and configures the endpoints.
         """
@@ -178,6 +181,12 @@ class AlchemyAPI:
             sys.exit(0)
         except Exception as e:
             print(e)
+
+    def setTimeout(self,interval):
+        """
+        Sets the timeout for the request parameter.
+        """
+        self.timeout = interval
 
     def entities(self, flavor, data, options={}):
         """
@@ -302,7 +311,7 @@ class AlchemyAPI:
         options -> various parameters that can be used to adjust how the API works, see below for more info on the available options.
 
         Available Options:
-        showSourceText	-> 0: disabled, 1: enabled
+        showSourceText  -> 0: disabled, 1: enabled
 
         OUTPUT:
         The response, already converted from JSON to a Python object. 
@@ -767,7 +776,7 @@ class AlchemyAPI:
 
         results = ""
         try:
-            results = self.s.post(url=post_url, data=post_data)
+            results = self.s.post(url=post_url, data=post_data, timeout = self.timeout)
         except Exception as e:
             print(e)
             return {'status': 'ERROR', 'statusInfo': 'network-error'}
